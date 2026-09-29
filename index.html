@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Box • Anime TV</title>
+<meta name="description" content="Anime Box - discover official anime channels and live streams in one TV-style dashboard.">
+<style>
+:root{
+  --bg:#07080d;--panel:#10131d;--panel2:#151925;--line:#262c3d;
+  --text:#f7f8ff;--muted:#a8aec0;--accent:#ff365d;--accent2:#8d7cff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 20% 0%,#21132a 0,#07080d 35%);color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input{font:inherit}
+header{padding:28px 18px 24px;border-bottom:1px solid var(--line);background:rgba(7,8,13,.82);backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}
+.top{max-width:1180px;margin:auto;display:flex;align-items:center;gap:18px}
+.logo{font-weight:900;letter-spacing:3px;font-size:17px}
+.logo span{color:var(--accent)}
+.title{margin-left:auto;text-align:right}
+.title strong{font-size:18px}.title small{display:block;color:var(--muted);margin-top:3px}
+.hero{max-width:1180px;margin:auto;padding:42px 18px 18px}
+.live-dot{display:inline-flex;align-items:center;gap:8px;background:#24101a;border:1px solid #4c1c2b;padding:7px 11px;border-radius:999px;color:#ff7e98;font-weight:800;font-size:12px;letter-spacing:.5px}
+.dot{width:8px;height:8px;background:#ff365d;border-radius:50%;box-shadow:0 0 12px #ff365d}
+h1{font-size:clamp(38px,7vw,68px);line-height:.98;margin:16px 0 12px;letter-spacing:-2px}
+.hero p{max-width:720px;color:var(--muted);font-size:16px;line-height:1.65;margin:0}
+.controls{max-width:1180px;margin:22px auto 0;padding:0 18px;display:flex;gap:10px;flex-wrap:wrap}
+.search{flex:1 1 260px;min-width:220px;background:var(--panel);border:1px solid var(--line);color:#fff;border-radius:12px;padding:13px 15px;outline:none}
+.search:focus{border-color:var(--accent2)}
+.filter{border:1px solid var(--line);background:var(--panel);color:#dce0ec;border-radius:12px;padding:12px 14px;cursor:pointer}
+.filter.active{background:#211c38;border-color:#6559b8;color:#fff}
+main{max-width:1180px;margin:auto;padding:20px 18px 60px}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:25px 0 13px}
+.section-head h2{font-size:22px;margin:0}
+.section-head span{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{overflow:hidden;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;transition:.2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);border-color:#414961}
+.art{height:145px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#21162d,#111b36)}
+.art:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;border:28px solid rgba(255,255,255,.07);transform:rotate(25deg)}
+.art b{font-size:40px;position:relative;z-index:1}
+.live{position:absolute;left:12px;top:12px;background:#e92d50;color:#fff;font-size:11px;font-weight:900;padding:6px 9px;border-radius:7px;letter-spacing:.4px}
+.content{padding:17px;display:flex;flex-direction:column;flex:1}
+.channel{font-size:12px;color:#a9b0c5;text-transform:uppercase;letter-spacing:1px}
+h3{margin:7px 0 7px;font-size:20px}
+.desc{color:var(--muted);line-height:1.5;font-size:14px;flex:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0}
+.tag{font-size:11px;color:#c8cce0;border:1px solid #2c3345;border-radius:999px;padding:5px 8px}
+.btn{display:block;text-align:center;text-decoration:none;color:#090a10;background:#fff;border-radius:11px;padding:12px;font-weight:900;font-size:13px}
+.btn:hover{background:#e8eaff}
+.note{margin-top:25px;padding:17px;border-radius:15px;border:1px solid var(--line);background:#0d1018;color:var(--muted);line-height:1.6;font-size:13px}
+.empty{display:none;text-align:center;padding:40px;color:var(--muted)}
+footer{text-align:center;padding:25px;color:#666d80;font-size:12px;border-top:1px solid var(--line)}
+@media(max-width:650px){
+ header{position:static}.top{align-items:flex-start}.title{display:none}
+ .hero{padding-top:30px} h1{letter-spacing:-1px}
+ .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">ANIME<span>BOX</span></div>
+    <div class="title"><strong>Anime TV</strong><small>Official channels • One place</small></div>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="live-dot"><span class="dot"></span> LIVE HUB</span>
+  <h1>Anime.<br>On demand. Live.</h1>
+  <p>Find official anime channels and their live pages without hunting through YouTube. Tap a card and watch directly on the rights holder's official channel.</p>
+</section>
+
+<div class="controls">
+  <input id="search" class="search" type="search" placeholder="🔎 Search channels, anime, Pokémon, TMS...">
+  <button class="filter active" data-filter="all">All</button>
+  <button class="filter" data-filter="live">Live / Stream</button>
+  <button class="filter" data-filter="asia">Asia</button>
+  <button class="filter" data-filter="japan">Japan / Studio</button>
+  <button class="filter" data-filter="kids">Kids</button>
+</div>
+
+<main>
+  <div class="section-head">
+    <h2>🔴 Anime Live & Stream Hub</h2>
+    <span id="count"></span>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="card" data-name="Muse Asia" data-tags="live asia">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🌸</b></div>
+      <div class="content">
+        <div class="channel">Official • Muse Communication</div>
+        <h3>Muse Asia</h3>
+        <div class="desc">Official anime distributor with free legal anime and scheduled YouTube streams in supported territories.</div>
+        <div class="tags"><span class="tag">Asia</span><span class="tag">Free</span><span class="tag">YouTube</span></div>
+        <a class="btn" href="https://www.youtube.com/@MuseAsia/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Ani-One Asia" data-tags="live asia">
+      <div class="art"><span class="live">CHECK LIVE</span><b>⚡</b></div>
+      <div class="content">
+        <div class="channel">Official • Medialink</div>
+        <h3>Ani-One Asia</h3>
+        <div class="desc">Licensed anime channel serving Asian territories, with free and scheduled YouTube anime streams where available.</div>
+        <div class="tags"><span class="tag">Asia</span><span class="tag">Free</span><span class="tag">YouTube</span></div>
+        <a class="btn" href="https://www.youtube.com/@AniOneAsia/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="It's Anime REMOW" data-tags="live japan">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🎌</b></div>
+      <div class="content">
+        <div class="channel">Official • REMOW</div>
+        <h3>It's Anime</h3>
+        <div class="desc">REMOW's official anime brand with licensed anime content and streaming initiatives, including FAST availability in supported regions.</div>
+        <div class="tags"><span class="tag">REMOW</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@ItsAnimeJP/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Anime on TMS TMS Entertainment" data-tags="live japan">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🎬</b></div>
+      <div class="content">
+        <div class="channel">Official • TMS Entertainment</div>
+        <h3>Anime! on TMS</h3>
+        <div class="desc">TMS Entertainment's official international anime channel with series, episodes, clips and scheduled content.</div>
+        <div class="tags"><span class="tag">TMS</span><span class="tag">Studio</span></div>
+        <a class="btn" href="https://www.youtube.com/@AnimeonTMSOfficialChannel/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Muse India" data-tags="live asia">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🇮🇳</b></div>
+      <div class="content">
+        <div class="channel">Official • Muse India</div>
+        <h3>Muse India</h3>
+        <div class="desc">Muse's India-focused official channel. Availability of shows and streams can change by title and territory.</div>
+        <div class="tags"><span class="tag">India</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@MuseIndia/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Ani-One India" data-tags="live asia">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🇮🇳</b></div>
+      <div class="content">
+        <div class="channel">Official • Ani-One</div>
+        <h3>Ani-One India</h3>
+        <div class="desc">India-focused Ani-One channel for licensed anime availability in the region.</div>
+        <div class="tags"><span class="tag">India</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@AniOneIndia/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="GundamInfo" data-tags="live japan">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🤖</b></div>
+      <div class="content">
+        <div class="channel">Official • Gundam</div>
+        <h3>GUNDAM.INFO</h3>
+        <div class="desc">Official Gundam information and video channel, with anime-related streams and events from the franchise.</div>
+        <div class="tags"><span class="tag">Gundam</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@GUNDAMINFO/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Pokemon Asia Official" data-tags="live asia kids">
+      <div class="art"><span class="live">CHECK LIVE</span><b>⚡</b></div>
+      <div class="content">
+        <div class="channel">Official • Pokémon</div>
+        <h3>Pokémon Asia Official</h3>
+        <div class="desc">Official Pokémon content for Asian audiences. Availability varies by country and channel.</div>
+        <div class="tags"><span class="tag">Kids</span><span class="tag">Asia</span></div>
+        <a class="btn" href="https://www.youtube.com/@PokemonAsiaOfficialHindi" target="_blank" rel="noopener">OPEN CHANNEL →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Crunchyroll" data-tags="live">
+      <div class="art"><span class="live">CHECK LIVE</span><b>🟠</b></div>
+      <div class="content">
+        <div class="channel">Official • Crunchyroll</div>
+        <h3>Crunchyroll</h3>
+        <div class="desc">Official anime channel for trailers, news, clips, events and selected official content.</div>
+        <div class="tags"><span class="tag">Official</span><span class="tag">Events</span></div>
+        <a class="btn" href="https://www.youtube.com/@Crunchyroll/live" target="_blank" rel="noopener">OPEN LIVE PAGE →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Pokémon Kids TV" data-tags="kids japan">
+      <div class="art"><span class="live">OFFICIAL</span><b>🎮</b></div>
+      <div class="content">
+        <div class="channel">Official • Pokémon</div>
+        <h3>Pokémon Kids TV</h3>
+        <div class="desc">Official Pokémon channel with songs, stories and family-friendly Pokémon content.</div>
+        <div class="tags"><span class="tag">Kids</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@pokemonkidstv/live" target="_blank" rel="noopener">OPEN CHANNEL →</a>
+      </div>
+    </article>
+
+    <article class="card" data-name="Toei Animation" data-tags="japan">
+      <div class="art"><span class="live">OFFICIAL</span><b>🐉</b></div>
+      <div class="content">
+        <div class="channel">Official • Toei Animation</div>
+        <h3>Toei Animation</h3>
+        <div class="desc">Official studio channel for Toei Animation news, trailers, events and selected video content.</div>
+        <div class="tags"><span class="tag">Studio</span><span class="tag">Official</span></div>
+        <a class="btn" href="https://www.youtube.com/@ToeiAnimationOfficial/live" target="_blank" rel="noopener">OPEN CHANNEL →</a>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="empty" id="empty">No channels found. Try another search or filter.</div>
+
+  <div class="note">
+    <strong>⚠️ How the LIVE label works:</strong> This beginner version does not use a YouTube API, so Anime Box cannot independently verify whether a stream is live at this exact second. “CHECK LIVE” takes you to the official channel's YouTube Live page, where YouTube shows the current status. Anime Box does not host, copy or re-upload anime.
+  </div>
+</main>
+
+<footer>Anime Box • Fan-made discovery directory • Videos remain on their respective official platforms.</footer>
+
+<script>
+const cards=[...document.querySelectorAll('.card')];
+const search=document.getElementById('search');
+const buttons=[...document.querySelectorAll('.filter')];
+const empty=document.getElementById('empty');
+const count=document.getElementById('count');
+let filter='all';
+
+function render(){
+  const q=search.value.toLowerCase().trim();
+  let shown=0;
+  cards.forEach(c=>{
+    const name=c.dataset.name.toLowerCase();
+    const tags=c.dataset.tags.split(' ');
+    const okText=!q || name.includes(q);
+    const okFilter=filter==='all' || tags.includes(filter);
+    const show=okText && okFilter;
+    c.style.display=show?'flex':'none';
+    if(show) shown++;
+  });
+  empty.style.display=shown?'none':'block';
+  count.textContent=shown+' channel'+(shown===1?'':'s');
+}
+search.addEventListener('input',render);
+buttons.forEach(b=>b.addEventListener('click',()=>{
+  buttons.forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  filter=b.dataset.filter;
+  render();
+}));
+render();
+</script>
+</body>
+</html>
